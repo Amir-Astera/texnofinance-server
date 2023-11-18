@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "texno-finance",
+  "private_key_id": "4e94dafa29eda5d17a3c97fcf50154cf209f4849",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDQxlWU3/vMpAuz\nHY3RptDB7VppZxjI+9ichQxFPvVclY/hxSUGBBmwrzeykdAupCQKxiu4uaWDDd/G\nf92ggEpHaFi/pFsBa0IWiP6i0nJg0W4NuSXG1E5jLolEQzTWZCI1AjlbYmfEToYG\n5RUQ6dKXlxzrPUPadVLlUo0LReqDHMsATKAlXldjPNRQUgnPvZMeoMkiqf5u+2Tt\nht7rfqoVmp0Tz44m8qAklmBI+zuBvvwQaZVTDfNf2Cvbt1mxMz50hogmuTCzvER2\ndh3fvC1/SQIajI7cxgIaB5o7ktjOJdW9nkEDTh/ylG1xdVPwTqu96PKMb6uuXXUj\nlSDd1e4pAgMBAAECggEAMP9rVH5g5T1W9ZmpEBw7gFgJURV+LqVUyB89qv7ErQ74\n7r7LGqdZtCrbQpCQMHIbd1/dIQSJAMH/0+FsjV+ujyXBNnEHXsTihNFwGZyUdX6R\neq0KXai0IPjqBFhVjT+A+7ni5jypJ9xZ/kJDeG24HBW+FsORKjNA2ktOiOfGyzBI\nvKlxxVo5HAY1xy3KdEB7QYXN6yMXdsjc4Q+kGiZ3VhHOR1t3fdkNtNiGHFNjWcld\nihA6P4gp6OR9j/3siAcTAgE2xJkMivs2zXC9kHL+pmSMOwzfHfSH/hUimhFOh9DV\nynjKWRpIBH9MknGfwnvj7/aAOrHnSNxPbzVPYaj+FQKBgQD+cFZc+srsakfz0ohP\nSX6V1NAAnxxXO3Hz6R4weY96FxACRNX09zY68YckjRcPMZrZYNZVcw8JkdrnMKH5\nAadDVs2X0DbXYmWhCW9wiQYH3e9DkI3c/AyOj+Owliw64xf0GaFnKbn50CfK+I4P\njKAoIEV3Mm76FtOoam7BkUIiwwKBgQDSDkUDn4yi14wBxdA50Ppw+ufgrotc56si\nZITS1QXQqmu1M/l3vl17hUbO3l6C4AhRbnOSKp7FTbmFGwF2fXSHcInwsMnumLHm\nijXhEJkaCidrXAXQzhsRmLwgYnGkTrH682temoEjvc5/7H35cKczT7RbBp1QMhmy\nsz7cvqpEowKBgBXToTT8tqetPlrmNpdGoLtNtEI5Y/7/tHjOCK7z3qEElXT8XrZS\n9q37xjIWgGHnSXdYXUqbQjD5+CNZAqwPvj+ClMRvMiUr5bf4zTyEJKZMHZhYMDNC\n0/ju0wN0/npWvNlN0ZC9/Zw2hRNeWyFuWNbYXd0p0GdXyfRqnPGx+lBtAoGANI+r\nh0eSOmEzQHJOM1lugXzXLuqeJsY1lWqPre3uAZPTVclGoEb7P2BPIo6UGa2Th0Tb\nGHUfu4FCbeMfD5Y+5XEsoxSpwtFkmqp05vdvSAvIZ13keqZIMbQFRxk7FIE4mfH1\nKPwCWn4xQONddmBRBk7oc2qJTLrsoUGm9jejhX8CgYBGhydLu10kER6efqYAYPrZ\n7FipvZE2PbT93WlEOm4wR0oSTfdsUq66TlmDa1qXuInQkSQ+owdN0Q3LP2+UdS8n\nLRuRTOgMZIKLZ+KBFUPDNDsZi2GduEaK77RbWzmMlrghAirmDFnjPtnQDlCv2XUV\nsr94Y7IxHk/H9czSNJuX6g==\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-utx5s@texno-finance.iam.gserviceaccount.com",
+  "client_id": "111430777038488142203",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-utx5s%40texno-finance.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

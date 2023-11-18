@@ -1,0 +1,29 @@
+spring:
+  data.r2dbc.repositories.enabled: true
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/texno-finance
+    username: postgres
+    password: postgres
+  flyway:
+    url: jdbc:postgresql://localhost:5432/texno-finance
+    username: postgres
+    password: postgres
+task:
+  poolSize: 5
+  threadNamePrefix: "ThreadPoolTaskScheduler"
+  checkContentTask:
+    executionPeriod: 10s
+  stopContentTask:
+    executionPeriod: 15s
+  calculateCameraLogsTask:
+    executionPeriod: 60s
+    startedAtFromCurrentTime: 2m
+    timeCoverage: 1m
+logging:
+  level:
+    org.springframework.data.r2dbc: WARN
+    dev.astera.texnofinanceserver: INFO
+    org.springframework.web.server.session.DefaultWebSessionManager: INFO
+    org.springframework.web.reactive.result.method.annotation.RequestBodyMethodArgumentResolver: INFO
+
+  pattern.console: "%clr(%5p -) %clr([%X{CorrelationId}]){magenta} %clr([%7thread]) %clr(:) %clr(%replace(%m){\"password=.*, \", \"password=xxx, \"}%n%wEx)"

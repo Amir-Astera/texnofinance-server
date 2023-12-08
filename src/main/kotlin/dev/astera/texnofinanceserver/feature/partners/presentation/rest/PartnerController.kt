@@ -21,6 +21,7 @@ import kotlinx.coroutines.reactor.awaitSingle
 import org.slf4j.Logger
 import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
+import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -29,6 +30,7 @@ import org.springframework.http.server.reactive.ServerHttpRequest
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 import org.springframework.web.server.ServerWebExchange
+import java.time.LocalDateTime
 
 @RestController
 @RequestMapping("/api/partners")
@@ -41,7 +43,9 @@ class PartnerController(
 		private val updatePartnerUseCase: UpdatePartnerUseCase,
 		private val statusActivateUseCase: StatusActivateUseCase,
 		private val statusDeactivateUseCase: StatusDeactivateUseCase,
-		private val statusArchiveUseCase: StatusArchiveUseCase
+		private val statusArchiveUseCase: StatusArchiveUseCase,
+		private val addCostUseCase: AddCostUseCase,
+		private val addPartnerCostUseCase: AddPartnerCostUseCase
 ) : Controller(logger) {
 
 	@SecurityRequirement(name = "security_auth")
@@ -62,6 +66,58 @@ class PartnerController(
 		}
 	}
 
+//	@SecurityRequirement(name = "security_auth")
+//	@PutMapping("/{id}/cost/{count}/month/{}")
+//	@ApiResponses(
+//		ApiResponse(
+//			responseCode = "200", description = "ok",
+//			content = [Content(schema = Schema(implementation = Unit::class))]
+//		)
+//	)
+//	suspend fun addCost(
+//		@PathVariable id: String,
+//		@PathVariable count: Double,
+//		@RequestParam
+//		@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
+//		month: LocalDateTime,
+//		@Parameter(hidden = true) exchange: ServerWebExchange
+//	): ResponseEntity<Unit> {
+//		try {
+//		    addCostUseCase(count, month)
+//			return HttpStatus.OK.response()
+//		} catch (ex: Exception) {
+//			val (code, message) = getError(ex)
+//			throw ResponseStatusException(code, message)
+//		}
+//	}
+
+	@SecurityRequirement(name = "security_auth")
+	@PutMapping("/{id}/cost")
+	@ApiResponses(
+		ApiResponse(
+			responseCode = "200", description = "ok",
+			content = [Content(schema = Schema(implementation = Unit::class))]
+		)
+	)
+	suspend fun addPartnerCost(
+		@PathVariable id: String,
+		@RequestParam(required = false)
+		count: Double? = null,
+		@RequestParam(required = false)
+		stableCost: Double? = null,
+		@RequestParam
+		@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
+		day: LocalDateTime,
+		@Parameter(hidden = true) exchange: ServerWebExchange
+	): ResponseEntity<Unit> {
+		try {
+			addPartnerCostUseCase(id, count, stableCost, day)
+			return HttpStatus.OK.response()
+		} catch (ex: Exception) {
+			val (code, message) = getError(ex)
+			throw ResponseStatusException(code, message)
+		}
+	}
 	@SecurityRequirement(name = "security_auth")
 	@GetApiResponses
 	@ApiResponses(

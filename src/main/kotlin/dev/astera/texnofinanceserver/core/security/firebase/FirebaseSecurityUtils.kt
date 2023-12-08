@@ -6,7 +6,6 @@ import org.springframework.http.HttpHeaders
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.core.Authentication
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken
-import org.springframework.util.StringUtils
 import org.springframework.web.server.ServerWebExchange
 import reactor.core.publisher.Mono
 import java.security.Principal
@@ -29,10 +28,9 @@ object FirebaseSecurityUtils {
     }
 
     fun getUserFromRequest(serverWebExchange: ServerWebExchange): Mono<SessionUser> {
-        val a = serverWebExchange.getPrincipal<Principal>()
+        return serverWebExchange.getPrincipal<Principal>()
             .cast(PreAuthenticatedAuthenticationToken::class.java)
             .map { obj -> obj.principal }
             .cast(SessionUser::class.java)
-        return a
     }
 }

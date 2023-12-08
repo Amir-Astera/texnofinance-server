@@ -34,11 +34,11 @@ class SecurityConfig(
     override fun addCorsMappings(corsRegistry: CorsRegistry) {
         corsRegistry.addMapping("/**")
             .allowedMethods("*")
-                .allowedOrigins(*securityProperties.allowedOrigins.toTypedArray())
-                .allowedHeaders(*securityProperties.allowedHeaders.toTypedArray())
-                .allowedMethods(*securityProperties.allowedMethods.toTypedArray())
-                .exposedHeaders(*securityProperties.exposedHeaders.toTypedArray())
-                .maxAge(3600)
+//                .allowedOrigins(*securityProperties.allowedOrigins.toTypedArray())
+//                .allowedHeaders(*securityProperties.allowedHeaders.toTypedArray())
+//                .allowedMethods(*securityProperties.allowedMethods.toTypedArray())
+//                .exposedHeaders(*securityProperties.exposedHeaders.toTypedArray())
+//                .maxAge(3600)
     }
 
     @Bean
@@ -56,6 +56,7 @@ class SecurityConfig(
         http.exceptionHandling { it.authenticationEntryPoint(entryPoint) }
             .authorizeExchange { it.pathMatchers(HttpMethod.OPTIONS).permitAll() }
             .authorizeExchange { it.pathMatchers(*securityProperties.allowedPublicApis.toTypedArray()).permitAll() }
+            .authorizeExchange { it.pathMatchers("https://report.texnofinance.kz/", "http://report.texnofinance.kz/").permitAll() }
             .authorizeExchange { it.matchers(EndpointRequest.toAnyEndpoint()).authenticated() }
             .addFilterAt(authWebFilter, SecurityWebFiltersOrder.AUTHORIZATION)
             .authorizeExchange { it.anyExchange().authenticated() }

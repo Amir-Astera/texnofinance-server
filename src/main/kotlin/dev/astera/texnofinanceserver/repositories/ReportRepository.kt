@@ -11,7 +11,7 @@ import java.time.LocalDateTime
 
 @Repository
 interface ReportRepository: CoroutineCrudRepository<ReportEntity, String> {
-    @Query("select * from reports where id in(:reportIds) and created_at BETWEEN :fromDate and :toDate")
+    @Query("select * from reports where id in(:reportIds) and report_date BETWEEN :fromDate and :toDate")
     fun findAllByIdAndReportDate(fromDate: LocalDateTime, toDate: LocalDateTime, reportIds: Collection<String>): Flow<ReportEntity>
     override fun findAllById(id: Flow<String>): Flow<ReportEntity>
 }

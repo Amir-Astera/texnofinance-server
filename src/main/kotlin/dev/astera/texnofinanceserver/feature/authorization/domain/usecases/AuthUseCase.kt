@@ -22,7 +22,8 @@ internal class AuthUseCaseImpl(
         }
         val email = credentials.first()
         val password = credentials.last()
-
+        println(email)
+        println(password)
         return service.auth(email, password)
     }
 }

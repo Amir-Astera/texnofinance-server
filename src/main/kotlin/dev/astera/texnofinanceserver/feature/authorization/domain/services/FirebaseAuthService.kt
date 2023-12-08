@@ -43,6 +43,7 @@ class FirebaseAuthServiceImpl(
             .awaitExchange { it.awaitEntity<AuthFirebaseResponseDto>() }
 
         val responseData = response.body
+        println(responseData)
 
 
 
@@ -57,6 +58,7 @@ class FirebaseAuthServiceImpl(
 //        val responseData = response.awaitEntity<AuthFirebaseResponseDto>().body
 //            ?: throw FirebaseAuthException("Authorization failed: Unrecognized response!")
 
+        println(responseData!!.idToken)
         return AuthResponseDto(
             tokenType = "Bearer",
             accessToken = responseData!!.idToken,

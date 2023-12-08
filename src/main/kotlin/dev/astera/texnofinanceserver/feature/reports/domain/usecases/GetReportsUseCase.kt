@@ -4,8 +4,11 @@ import dev.astera.texnofinanceserver.feature.partners.domain.services.PartnerSer
 import dev.astera.texnofinanceserver.feature.reports.domain.models.FinalReport
 import dev.astera.texnofinanceserver.feature.reports.domain.services.ReportsService
 import org.springframework.stereotype.Service
+import java.time.Duration
 import java.time.LocalDateTime
+import kotlin.math.abs
 import kotlin.math.pow
+import kotlin.math.roundToInt
 
 interface GetReportsUseCase {
     suspend operator fun invoke(partnerId: String, fromDate: LocalDateTime, toDate: LocalDateTime): FinalReport
@@ -17,14 +20,22 @@ internal class GetReportsUseCaseImpl(
     private val partnerService: PartnerService
 ): GetReportsUseCase {
     override suspend fun invoke(partnerId: String, fromDate: LocalDateTime, toDate: LocalDateTime): FinalReport {
-        val reports = reportsService.getReports(partnerId, fromDate, toDate)
+        val partner = partnerService.get(partnerId)
+        val reports = reportsService.getReports(partner.id, fromDate, toDate)
         val fee = partnerService.getFee()
+        val costsEntity = partnerService.getPartnerCosts(partner.id, fromDate, toDate)
+        val stableCost = partnerService.getPartnerStableCost(partner.id)
+        val monthDays = LocalDateTime.now().month.maxLength()
+        val days = abs(Duration.between(toDate.toLocalDate().atStartOfDay(), fromDate.toLocalDate().atStartOfDay()).toDays()).toInt()
+
+
         val profit = reports.sumOf { it.profit }
         val profitStore = reports.sumOf { it.profitStore }
         val otherProfits = reports.sumOf { it.otherProfit }
         val profits = profit + profitStore + otherProfits
-        val costs = reports.sumOf { it.cost }
-        val net = profits - costs
+        val costs = costsEntity.sumOf { it.cost } + stableCost// Расход
+        val refund = reports.sumOf { it.cost } // Возврат
+        val net = profits - ((costs / monthDays) * if (days == 29) days + 1 else days)
         val netProfit = net - ((fee / 100) * net)
         val newClients = reports.sumOf { it.newClients }
         val clients = reports.sumOf { it.clients } + newClients
@@ -35,8 +46,8 @@ internal class GetReportsUseCaseImpl(
             profitStore = profitStore,
             otherProfit = otherProfits,
             profits = profits, // доход + доход магазина + доп доходы
-            costs = costs,
-            netProfit = netProfit, //доходы - расходы - 3%
+            costs = costs, //возврат
+            netProfit = (netProfit * 100.0).roundToInt() / 100.0, //доходы - расходы - 3% //Math.round(number3digits * 100.0) / 100.0
             clients = clients , //клиенты + новые клиенты(все клиенты)
             newClients = newClients,
             netIssue = netIssue, // выдача за сутки - возврат - накладная

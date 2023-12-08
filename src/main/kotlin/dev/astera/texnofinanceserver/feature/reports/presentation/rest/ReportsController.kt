@@ -20,8 +20,10 @@ import org.springframework.http.ResponseEntity
 import org.springframework.http.server.reactive.ServerHttpRequest
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
+import java.time.Duration
 import java.time.LocalDateTime
 import java.time.Month
+import kotlin.math.abs
 
 @RestController
 @RequestMapping("/api/reports")
@@ -59,6 +61,7 @@ class ReportsController(
         @RequestParam
         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
         fromDate: LocalDateTime,
+        @RequestParam(required = false)
         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
         toDate: LocalDateTime,
     ): ResponseEntity<FinalReport> {

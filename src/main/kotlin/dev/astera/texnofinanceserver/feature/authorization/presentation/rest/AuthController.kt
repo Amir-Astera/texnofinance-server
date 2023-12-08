@@ -27,8 +27,11 @@ class AuthController(
         request: ServerHttpRequest
     ): ResponseEntity<AuthResponseDto> {
         val authorizationHeader = request.headers.getFirst(HttpHeaders.AUTHORIZATION) ?: ""
+        println(authorizationHeader)
         val encodedToken = authorizationHeader.split(' ').lastOrNull() ?: ""
+        println(encodedToken)
         val response = authUseCase(encodedToken)
+        println(response)
         return ResponseEntity
             .status(HttpStatus.OK)
             .cacheControl(CacheControl.noCache())

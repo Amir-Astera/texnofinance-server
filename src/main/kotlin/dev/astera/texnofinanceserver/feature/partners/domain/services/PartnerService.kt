@@ -2,15 +2,16 @@ package dev.astera.texnofinanceserver.feature.partners.domain.services
 
 import dev.astera.texnofinanceserver.core.extension.toEntity
 import dev.astera.texnofinanceserver.core.extension.toModel
-import dev.astera.texnofinanceserver.repositories.PartnerRepository
+import dev.astera.texnofinanceserver.feature.partners.data.entity.CostEntity
+import dev.astera.texnofinanceserver.feature.partners.data.entity.PartnerCostsEntity
 import dev.astera.texnofinanceserver.feature.partners.domain.errors.PartnerNotFoundException
 import dev.astera.texnofinanceserver.feature.partners.domain.models.Partner
 import dev.astera.texnofinanceserver.feature.reports.domain.models.ReportAggregate
-import dev.astera.texnofinanceserver.repositories.FeeRepository
-import dev.astera.texnofinanceserver.repositories.PartnerReportRepository
-import dev.astera.texnofinanceserver.repositories.ReportRepository
+import dev.astera.texnofinanceserver.repositories.*
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
+import org.springframework.cglib.core.Local
+import org.springframework.data.annotation.Id
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 
@@ -22,6 +23,10 @@ interface PartnerService {
     suspend fun findByName(name: String): Partner?
     suspend fun getAllByIds(partnerIds: List<String>): Collection<Partner>
     suspend fun getFee(): Double
+    suspend fun addPartnerCost(partnerId: String, count: Double? = null, stableCost: Double? = null, day: LocalDateTime): Unit
+    suspend fun addCost(count: Double, month: LocalDateTime): Unit
+    suspend fun getPartnerCosts(partnerId: String, fromDate: LocalDateTime, toDate: LocalDateTime): List<CostEntity>
+    suspend fun getPartnerStableCost(partnerId: String): Double
 }
 
 @Component
@@ -29,7 +34,9 @@ class PartnerServiceImpl(
     private val partnerRepository: PartnerRepository,
     private val partnerReportRepository: PartnerReportRepository,
     private val reportRepository: ReportRepository,
-    private val feeRepository: FeeRepository
+    private val feeRepository: FeeRepository,
+    private val costsRepository: CostsRepository,
+    private val partnerCostsRepository: PartnerCostsRepository
 ): PartnerService{
     override suspend fun get(id: String): Partner =
             partnerRepository.findById(id)?.run { toModel(reports = getReports(id)) } ?: throw PartnerNotFoundException()
@@ -79,6 +86,46 @@ class PartnerServiceImpl(
             "",
             0.0
         ))
+    }
+
+    override suspend fun addPartnerCost(partnerId: String, count: Double?, stableCost: Double?, day: LocalDateTime) {
+        val partnerEntity = partnerRepository.findById(partnerId) ?: throw PartnerNotFoundException()
+        val constEntity = costsRepository.save(
+            CostEntity(
+                cost = count ?: 0.0,
+                stableCost = stableCost ?: 0.0,
+                month = day,
+                createdAt = LocalDateTime.now()
+            )
+        )
+        partnerCostsRepository.save(PartnerCostsEntity(
+            partnerId = partnerEntity.id,
+            costId = constEntity.id,
+            createdAt = LocalDateTime.now(),
+            updatedAt = LocalDateTime.now()
+        ))
+    }
+
+    override suspend fun addCost(count: Double, month: LocalDateTime) {
+        costsRepository.save(
+            CostEntity(
+                cost = count,
+                month = month,
+                createdAt = LocalDateTime.now()
+            )
+        )
+    }
+
+    override suspend fun getPartnerCosts(partnerId: String, fromDate: LocalDateTime, toDate: LocalDateTime): List<CostEntity> {
+        val partnerCostsEntity = partnerCostsRepository.findAllByPartnerId(partnerId)?.map { it }
+        val costEntity = costsRepository.findAllByIdAndMonth(fromDate, toDate, partnerCostsEntity!!.map { it.costId }.toList())
+        return costEntity.toList()
+    }
+
+    override suspend fun getPartnerStableCost(partnerId: String): Double {
+        val partnerCostsEntity = partnerCostsRepository.findAllByPartnerId(partnerId)
+        val costsEntity = costsRepository.findAllById(partnerCostsEntity!!.map { it.costId })
+        return costsEntity.toList().sumOf { it.stableCost }
     }
 
 }
